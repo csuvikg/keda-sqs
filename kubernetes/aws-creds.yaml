@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: aws-creds
+type: Opaque
+data:
+  aws_access_key_id: <put access key here>
+  aws_secret_access_key: <put secret key here>

@@ -1,0 +1,11 @@
+# python
+venv/
+
+# terraform
+terraform.tfstate*
+.terraform
+.terraform.lock.hcl
+
+# IntelliJ
+.idea/
+*.iml

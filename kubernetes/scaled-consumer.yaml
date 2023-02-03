@@ -1,0 +1,35 @@
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: keda-trigger-aws-auth
+spec:
+  secretTargetRef:
+    - parameter: awsAccessKeyID
+      name: aws-creds
+      key: aws_access_key_id
+    - parameter: awsSecretAccessKey
+      name: aws-creds
+      key: aws_secret_access_key
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: consumer-scaler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: consumer-deployment
+  pollingInterval: 30
+  cooldownPeriod: 120
+  idleReplicaCount: 0
+  minReplicaCount: 1
+  maxReplicaCount: 10
+  triggers:
+    - type: aws-sqs-queue
+      authenticationRef:
+        name: keda-trigger-aws-auth
+      metadata:
+        queueURLFromEnv: SQS_QUEUE_URL
+        queueLength: "10"
+        awsRegion: "eu-central-1"
